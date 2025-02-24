@@ -1,0 +1,45 @@
+# Unity
+[Ll]ibrary/
+[Tt]emp/
+[Tt]arget/
+[Aa]ssets/AssetStoreTools*
+[Dd]ebug/
+[Dd]ebugPublic/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+UserSettings/
+
+# User-specific files
+.idea/
+.vscode/
+*.swp
+*.sublime-workspace
+*.sublime-project
+
+# Visual Studio
+.vs/
+.vscode/
+
+# Visual Studio project files (C#)
+Assembly-CSharp.csproj
+Assembly-CSharp-Editor.csproj
+Assembly-CSharp-Editor-FirstPass.csproj
+Assembly-CSharp-FirstPass.csproj
+*.csproj
+*.sln
+PlatformGame.sln
+
+# Windows specific
+Thumbs.db
+ehthumbs.db
+
+# macOS specific
+.DS_Store
+
+# JetBrains Rider
+.idea/
+
+# User-specific files for Unity (Windows)
+*.user
+*.userprefs
