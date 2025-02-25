@@ -1,4 +1,6 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -9,6 +11,7 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
     private bool isRunning = false;
     private bool isJumping = false;
+    public int playerHealth = 100;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -16,6 +19,8 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         animator.SetBool("isRunning", false);
         animator.SetBool("isJumping", false);
+        animator.SetBool("inDamage", false);
+        Debug.Log("Player Health: " + playerHealth);
     }
 
     // Update is called once per frame
@@ -26,6 +31,7 @@ public class PlayerController : MonoBehaviour
         if (moveInput != 0)
         {
             isRunning = true;
+            animator.SetBool("isJumping", false);
         }
         else
         {
@@ -77,5 +83,25 @@ public class PlayerController : MonoBehaviour
 
             animator.SetBool("isJumping", false);
         }
+    }
+    public void TakeDamage(int damage)
+    {
+        playerHealth -= damage;
+        animator.SetBool("InDamage", true);
+        Debug.Log($"take damage {damage} + off damage. Player Health acctualy is {playerHealth}" );
+
+        StartCoroutine(ResetDamageAnimation());
+
+        if (playerHealth <= 0)
+        {
+           Debug.Log("Player is dead");
+            SceneManager.LoadScene(1);
+            //Game Over
+        }
+    }
+    private IEnumerator ResetDamageAnimation()
+    {
+        yield return new WaitForSeconds(1f);
+        animator.SetBool("InDamage", false);
     }
 }
