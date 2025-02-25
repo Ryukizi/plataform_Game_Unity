@@ -13,7 +13,7 @@ public class EnemyController : MonoBehaviour
     private Animator animator;
     private bool isWalking = false;
     public int enemyHealth = 50;
-    public float attackInterval = 1f;
+    public float attackInterval = 10f;
     private Transform currentTarget;
     private Rigidbody2D rb;
     private Vector3 scale;
@@ -63,7 +63,7 @@ public class EnemyController : MonoBehaviour
         if (other.CompareTag("AttackZone"))
         {
             Debug.Log("Enemy is Attacked");
-            EnemyTakeDamage(10);
+            EnemyTakeDamage(5);
         }
     }
 
@@ -84,7 +84,8 @@ public class EnemyController : MonoBehaviour
     {
         while (true)
         {
-            player.TakeDamage(10);
+            
+            player.TakeDamage(5);
             animator.SetTrigger("Attack");
             Debug.Log("Enemy is attacking player...");
             yield return new WaitForSeconds(attackInterval);

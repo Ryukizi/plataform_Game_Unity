@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Unity.Burst.CompilerServices;
 
 public class PlayerController : MonoBehaviour
 {
@@ -30,6 +31,12 @@ public class PlayerController : MonoBehaviour
     {
         moveInput = Input.GetAxisRaw("Horizontal");
 
+        float Shift = Input.GetAxisRaw("Fire3");
+        if (Shift > 0)
+        {
+            moveInput *= 2;
+        }
+
         if (moveInput != 0)
         {
             isRunning = true;
@@ -47,12 +54,28 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Jump");
         }
 
+        lifeSlider.value = playerHealth * 0.01f;
+
         if (Input.GetButtonDown("Fire1"))
         {
             animator.SetTrigger("Attack");
         }
+    }
 
-        lifeSlider.value = playerHealth * 0.01f;
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("PowerUp"))
+        {
+            Debug.Log("Player get powerUp");
+            if (playerHealth < 100)
+            {
+                playerHealth += 10;
+            }
+            else
+            {
+               Debug.Log($"Player Health is full. Player Health acctualy is {playerHealth}");
+            }
+        }
     }
 
     void FixedUpdate()
@@ -110,7 +133,7 @@ public class PlayerController : MonoBehaviour
     }
     private IEnumerator ResetDamageAnimation()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
         animator.SetBool("InDamage", false);
     }
 }
