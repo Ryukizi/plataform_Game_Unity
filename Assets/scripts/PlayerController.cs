@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         animator.SetBool("isRunning", false);
         animator.SetBool("isJumping", false);
-        animator.SetBool("inDamage", false);
+        animator.SetBool("InDamage", false);
         Debug.Log("Player Health: " + playerHealth);
     }
 
@@ -43,6 +43,11 @@ public class PlayerController : MonoBehaviour
         {
             Jump();
             Debug.Log("Jump");
+        }
+
+        if (Input.GetButtonDown("Fire1"))
+        {
+            animator.SetTrigger("Attack");
         }
     }
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEditor.Tilemaps;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EnemyController : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class EnemyController : MonoBehaviour
     private Rigidbody2D rb;
     private Vector3 scale;
     private Coroutine attackCoroutine;
+    public float fadeDuration = 1f;
+    private SpriteRenderer spriteRenderer;
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -24,6 +27,7 @@ public class EnemyController : MonoBehaviour
         currentTarget = waypointA;
         scale = transform.localScale;
         Debug.Log("Enemy Health: " + enemyHealth);
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -54,6 +58,12 @@ public class EnemyController : MonoBehaviour
         }else
         {
             Debug.LogWarning("Player Controller not found in object with tag ZoneAttack");
+        }
+
+        if (other.CompareTag("AttackZone"))
+        {
+            Debug.Log("Enemy is Attacked");
+            EnemyTakeDamage(10);
         }
     }
 
@@ -115,5 +125,40 @@ public class EnemyController : MonoBehaviour
         Vector3 flippedScale = scale;
         flippedScale.x *= -1;
         transform.localScale = flippedScale;
+    }
+
+    public void EnemyTakeDamage(int damage)
+    {
+        enemyHealth -= damage;
+        animator.SetBool("InDamage", true);
+        Debug.Log($"take damage {damage} + off damage. Player Health acctualy is {enemyHealth}");
+
+        StartCoroutine(ResetDamageAnimation());
+
+        if (enemyHealth <= 0)
+        {
+            Debug.Log("Enemy is Dead");
+            StartCoroutine(FadeOutAndDestroy());
+        }
+    }
+        private IEnumerator ResetDamageAnimation()
+        {
+        yield return new WaitForSeconds(1f);
+        animator.SetBool("InDamage", false);
+        }
+
+    private IEnumerator FadeOutAndDestroy()
+    {
+        float startAlfa = spriteRenderer.color.a;
+        float rate = 1.0f / fadeDuration;
+        float progress = 0.0f;  
+        while (progress < 1.0f)
+        {
+            Color tmpColor = spriteRenderer.color;
+            spriteRenderer.color = new Color(tmpColor.r, tmpColor.g, tmpColor.b, Mathf.Lerp(startAlfa, 0, progress));
+            progress += rate * Time.deltaTime;
+            yield return null;
+        }
+        Destroy(gameObject);
     }
 }
