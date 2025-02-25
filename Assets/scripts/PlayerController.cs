@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
@@ -12,6 +13,7 @@ public class PlayerController : MonoBehaviour
     private bool isRunning = false;
     private bool isJumping = false;
     public int playerHealth = 100;
+    public Slider lifeSlider;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -49,6 +51,8 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetTrigger("Attack");
         }
+
+        lifeSlider.value = playerHealth * 0.01f;
     }
 
     void FixedUpdate()
@@ -100,7 +104,7 @@ public class PlayerController : MonoBehaviour
         if (playerHealth <= 0)
         {
            Debug.Log("Player is dead");
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene(2);
             //Game Over
         }
     }
